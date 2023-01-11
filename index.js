@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 
 //ROUTES
-const testRoute = require("./routes/test");
+const authRoute = require('./routes/authEmp');
 
 const port = process.env.PORT || 8000;
 const origin =
@@ -34,7 +34,7 @@ app.use(
 app.use(morgan("common"));
 
 //ROUTERS
-app.use("/api", testRoute);
+app.use("/api", authRoute);
 
 const server = app.listen(port, () => {
   console.log(`server is running... at ${port}`);
