@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20");
 
 const app = express();
 
@@ -23,6 +25,19 @@ mongoose.connect(process.env.MONGODB_URL, () => {
 	console.log('Connect to MongoDB');
 });
 
+//SSO
+passport.use(new GoogleStrategy(
+  {
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: '/auth/google/callback'
+  },
+  accessToken => {
+    console.log(accessToken);
+  }
+));
+
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
@@ -39,3 +54,12 @@ app.use("/api", authRoute);
 const server = app.listen(port, () => {
   console.log(`server is running... at ${port}`);
 });
+
+//TESTING
+app.get(
+  '/auth/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })
+);
+app.get('/auth/google/callback', passport.authenticate('google'));
