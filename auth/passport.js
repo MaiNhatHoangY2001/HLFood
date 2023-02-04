@@ -1,6 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const Customer = require("../model/Customer")
+const Customer = require("../model/Customer");
+const { createToken } = require('./authCusController');
 
 
 passport.use(
@@ -15,14 +16,15 @@ passport.use(
                 if (err) { return cb(err); }
                 if (!user) {
                     // Save the new user to the database
-                    var newUser = new Customer({ name: profile.displayName, email: profile.emails[0].value });
+                    const newUser = new Customer({ name: profile.displayName, email: profile.emails[0].value });
                     newUser.save(function (err) {
                         if (err) { return cb(err); }
-                        return cb(null, profile);
+
+                        return cb(null, { profile: profile, authUser: newUser });
                     });
                 } else {
                     // User already exists
-                    return cb(null, profile);
+                    return cb(null, {profile: profile, authUser: user});
                 }
             });
         }

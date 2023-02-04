@@ -43,6 +43,21 @@ const authController = {
     }
   },
 
+  loginGoogle: async (req, res) => {
+    try {
+      // Create a new session for the authenticated user
+      req.session.regenerate(function (err) {
+        if (err) { return next(err); }
+
+        // Successful authentication, redirect home.
+        const token = authController.createToken(req.user.authUser, res);
+        res.status(200).json(token);
+      });
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
   //LOGIN
   loginUser: async (req, res) => {
     try {
@@ -61,28 +76,13 @@ const authController = {
       }
 
       if (user && validPassword) {
-        const accessToken = authController.generateAccessToken(user);
-        const refreshToken = authController.generateRefreshToken(user);
-
-        // create refresh token in database
-        user.updateOne({ refreshToken: refreshToken });
-
-        res.cookie("refreshToken", refreshToken, {
-          // create cookie with refresh token that expires in 7 days
-          httpOnly: true,
-          expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-          secure: true,
-          path: "/",
-          sameSite: "none",
-        });
-        const { password, ...others } = user._doc;
-        res.status(200).json({ ...others, accessToken, refreshToken });
+        const token = this.createToken(user);
+        res.status(200).json(token);
       }
     } catch (error) {
       res.status(500).json(error);
     }
   },
-
   //REDIS
   requestRefreshToken: async (req, res) => {
     //Take refresh token from user
@@ -102,7 +102,6 @@ const authController = {
           console.log(err);
         }
         //create new access token, refresh token and send to user
-
         const newAccessToken = authController.generateAccessToken(user);
         const newRefreshToken = authController.generateRefreshToken(user);
 
@@ -120,6 +119,25 @@ const authController = {
         });
       }
     );
+  },
+
+  createToken: (user, res) => {
+    const accessToken = authController.generateAccessToken(user);
+    const refreshToken = authController.generateRefreshToken(user);
+
+    // create refresh token in database
+    user.updateOne({ refreshToken: refreshToken });
+
+    res.cookie("refreshToken", refreshToken, {
+      // create cookie with refresh token that expires in 7 days
+      httpOnly: true,
+      expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+      secure: true,
+      path: "/",
+      sameSite: "none",
+    });
+    const { password, ...others } = user._doc;
+    return { ...others, accessToken, refreshToken }
   },
 
   //LOGOUT
