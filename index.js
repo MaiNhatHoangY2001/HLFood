@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -6,37 +7,46 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20");
+
 
 const app = express();
 
+dotenv.config();
+
+
+
 //ROUTES
-const authRoute = require('./routes/authEmp');
+const authEmp = require('./routes/authEmp');
+const authCus = require('./routes/authCus');
+
+
 
 const port = process.env.PORT || 8000;
+
 const origin =
   process.env.NODE_ENV !== "production"
-    ? "http://localhost:3000"
-    : "https://mchat-realtimechat-cnm.netlify.app";
+    ? process.env.LOCAL_ENV
+    : process.env.DEPLOY_ENV;
 
-dotenv.config();
 //CONNECT DATABASE
 mongoose.connect(process.env.MONGODB_URL, () => {
-	console.log('Connect to MongoDB');
+  console.log('Connect to MongoDB');
 });
 
 //SSO
-passport.use(new GoogleStrategy(
-  {
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/callback'
-  },
-  accessToken => {
-    console.log(accessToken);
-  }
-));
 
+// Initialize the Express Session middleware
+app.use(session({
+  secret: process.env.COOKIE_KEY,
+  resave: true,
+  saveUninitialized: true
+}));
+
+
+
+// Initialize the Passport library
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -49,17 +59,12 @@ app.use(
 app.use(morgan("common"));
 
 //ROUTERS
-app.use("/api", authRoute);
+app.use("/auth", authEmp);
+app.use("/auth", authCus);
 
 const server = app.listen(port, () => {
   console.log(`server is running... at ${port}`);
 });
 
-//TESTING
-app.get(
-  '/auth/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email']
-  })
-);
-app.get('/auth/google/callback', passport.authenticate('google'));
+
+

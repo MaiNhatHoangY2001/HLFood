@@ -1,5 +1,4 @@
-import hasingPass from "../middleware/hasingPasword";
-
+const hasingPass = require("../middleware/hasingPasword");
 const mongoose = require("mongoose");
 
 const customer = new mongoose.Schema({
@@ -8,6 +7,9 @@ const customer = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  googleId: {
+    type: String,
+  },
   email: {
     type: String,
     required: true,
@@ -15,12 +17,10 @@ const customer = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
     trim: true,
   },
   phoneNumber: {
     type: String,
-    required: true,
     trim: true,
   },
   billHistory: [
