@@ -33,4 +33,4 @@ const hasingPass = (schema) => {
 }
 
 
-export default hasingPass;
+module.exports = hasingPass
