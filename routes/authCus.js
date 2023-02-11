@@ -21,14 +21,8 @@ router.post(
     authCusController.comparePassword
 );
 
-// Implement the authentication routes
-router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-
-//http://localhost:8000/auth/google
-router.get("/google/callback",
-    passport.authenticate("google", { failureRedirect: "/login" }),
-    authCusController.loginGoogle);
+router.post("/google", authCusController.loginGoogle);
 
 //LOGOUT
 router.post(

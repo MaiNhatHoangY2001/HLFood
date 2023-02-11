@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const Customer = require("../model/Customer");
 const jwt = require("jsonwebtoken");
+const { verifyGoogleToken } = require("../middleware/middlewareController");
+const { checkCus } = require("../controllers/cusController");
 
 const authController = {
   //REGISTER IS ADD USER IN CONTROLLER
@@ -45,14 +47,19 @@ const authController = {
 
   loginGoogle: async (req, res) => {
     try {
-      // Create a new session for the authenticated user
-      req.session.regenerate(function (err) {
-        if (err) { return next(err); }
+      if (req.body.credential) {
+        const verificationResponse = await verifyGoogleToken(req.body.credential);
+        if (verificationResponse.error) {
+          return res.status(400).json({
+            message: verificationResponse.error,
+          });
+        }
+        const profile = verificationResponse?.payload;
 
-        // Successful authentication, redirect home.
-        const token = authController.createToken(req.user.authUser, res);
+        const user = await checkCus(profile);
+        const token = authController.createToken(user, res);
         res.status(200).json(token);
-      });
+      }
     } catch (error) {
       res.status(500).json(error);
     }

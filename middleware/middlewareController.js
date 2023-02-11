@@ -1,6 +1,11 @@
 const jswt = require('jsonwebtoken');
+const { OAuth2Client } = require("google-auth-library");
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const middlewareController = {
+
 	//verifyToken
 	verifyToken: (req, res, next) => {
 		const token = req.headers.token;
@@ -17,7 +22,18 @@ const middlewareController = {
 			return res.status(401).json("You're not authenticated");
 		}
 	},
-
+    
+    verifyGoogleToken: async (token) => {
+        try {
+            const ticket = await client.verifyIdToken({
+              idToken: token,
+              audience:  GOOGLE_CLIENT_ID,
+            });
+            return { payload: ticket.getPayload() };
+          } catch (error) {
+            return res.status(401).json(`${error}: Invalid user detected. Please try again`);
+          }
+    },
     verifyTokenAndAdminAuth: (req, res, next) => {
         middlewareController.verifyToken(req, res, ()=> {
             if(req.user.id == req.params.id || req.user.admin){

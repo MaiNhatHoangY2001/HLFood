@@ -13,6 +13,17 @@ const cusController = {
       res.status(500).json(error);
     }
   },
+  checkCus: async (profile) => {
+    const cus = await Customer.findOne({ email: profile.email });
+
+    if (!cus) {
+      // Save the new user to the database
+      const newUser = new Customer({ name: profile.name, email: profile.email });
+      const saveUser = await newUser.save();
+      return saveUser
+    } else
+      return cus
+  }
 };
 
 module.exports = cusController;
