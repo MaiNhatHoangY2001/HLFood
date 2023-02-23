@@ -7,12 +7,12 @@ const employee = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  phoneNumber: {
+  phone_num: {
     type: String,
     required: true,
     trim: true,
   },
-  email: {
+  username: {
     type: String,
     required: true,
     trim: true,
@@ -27,16 +27,16 @@ const employee = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  billHistory: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "BillHistory",
-    },
-  ],
   admin: {
     type: Boolean,
     default: false,
   },
+  bookings: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking",
+    }
+  ]
 });
 
 hasingPass(employee);

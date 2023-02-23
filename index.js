@@ -6,7 +6,6 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
-const passport = require("passport");
 
 
 const app = express();
@@ -17,7 +16,6 @@ dotenv.config();
 
 //ROUTES
 const authEmp = require('./routes/authEmp');
-const authCus = require('./routes/authCus');
 
 
 
@@ -43,11 +41,6 @@ app.use(session({
 }));
 
 
-
-// Initialize the Passport library
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
@@ -60,7 +53,6 @@ app.use(morgan("common"));
 
 //ROUTERS
 app.use("/auth", authEmp);
-app.use("/auth", authCus);
 
 const server = app.listen(port, () => {
   console.log(`server is running... at ${port}`);
