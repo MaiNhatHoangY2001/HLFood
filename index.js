@@ -16,6 +16,7 @@ dotenv.config();
 
 //ROUTES
 const authEmp = require('./routes/authEmp');
+const foodRoutes = require('./routes/foodRoutes');
 
 
 
@@ -53,6 +54,8 @@ app.use(morgan("common"));
 
 //ROUTERS
 app.use("/auth", authEmp);
+app.use("/api", foodRoutes);
+
 
 const server = app.listen(port, () => {
   console.log(`server is running... at ${port}`);
