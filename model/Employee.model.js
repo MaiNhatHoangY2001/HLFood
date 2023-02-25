@@ -22,7 +22,7 @@ const employee = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  jobTitle: {
+  job_title: {
     type: String,
     required: true,
     trim: true,
@@ -31,10 +31,22 @@ const employee = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  bookings: [
+  tables: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Booking",
+      ref: "Tables",
+    }
+  ],
+  shifts:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Shift",
+    }
+  ],
+  orders:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
     }
   ]
 });

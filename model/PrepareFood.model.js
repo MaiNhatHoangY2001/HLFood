@@ -6,8 +6,7 @@ const pre_food = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    booking:
-    {
+    booking: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Booking",
     },

@@ -17,6 +17,7 @@ dotenv.config();
 //ROUTES
 const authEmp = require('./routes/authEmp');
 const foodRoutes = require('./routes/foodRoutes');
+const tableRoutes =  require('./routes/tableRoutes');
 
 
 
@@ -55,6 +56,7 @@ app.use(morgan("common"));
 //ROUTERS
 app.use("/auth", authEmp);
 app.use("/api", foodRoutes);
+app.use("/api", tableRoutes);
 
 
 const server = app.listen(port, () => {

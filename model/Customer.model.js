@@ -11,10 +11,10 @@ const customer = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    bookings: [
+    order: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Booking",
+            ref: "Order",
         }
     ]
 });

@@ -1,24 +1,10 @@
 const mongoose = require("mongoose");
 
 const booking = new mongoose.Schema({
-    table_num: {
-        type: Number,
-        required: true,
-    },
-    status: {
-        type: Boolean,
-        required: true,
-    },
     time_booking: {
-        type: String,
-        require: true,
+        type: Date,
     },
-    price: {
-        type: Number,
-        required: true,
-    },
-    order:
-    {
+    order: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Order",
     },
@@ -26,7 +12,19 @@ const booking = new mongoose.Schema({
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Employee",
-    }
+    },
+    tables: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Table",
+        }
+    ],
+    pre_food: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "PrepareFood",
+        }
+    ]
 
 });
 

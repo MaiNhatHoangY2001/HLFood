@@ -40,7 +40,15 @@ const order = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Booking",
         }
-    ]
+    ],
+    customer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Customer",
+    },
+    employee: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Employee",
+    }   
 
 })
 
