@@ -5,6 +5,10 @@ const order = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    time_booking: {
+        type: Date,
+        default: Date.now()
+    },
     vat: {
         type: Number,
         default: 0.1,
@@ -35,10 +39,10 @@ const order = new mongoose.Schema({
             ref: "OrderDetail",
         }
     ],
-    bookings: [
+    tables: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Booking",
+            ref: "Table",
         }
     ],
     customer: {
@@ -48,7 +52,7 @@ const order = new mongoose.Schema({
     employee: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Employee",
-    }   
+    }
 
 })
 

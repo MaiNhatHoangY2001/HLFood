@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const Employee = require("../model/Employee.model");
 const jwt = require("jsonwebtoken");
 const { verifyGoogleToken } = require("../middleware/middlewareController");
-const { checkEmp } = require("../controllers/empController");
+const { checkEmp } = require("../controllers/emp.controller");
 
 const authController = {
   //REGISTER IS ADD USER IN CONTROLLER
