@@ -1,4 +1,4 @@
-const foodController = require("../controllers/foodController");
+const foodController = require("../controllers/food.controller");
 
 const router = require("express").Router();
 

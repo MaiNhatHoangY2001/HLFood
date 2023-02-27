@@ -22,14 +22,7 @@ const food = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "OrderDetail",
         }
-    ],
-    pre_food: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "PrepareFood",
-        }
     ]
-
 });
 
 module.exports = mongoose.model("Food", food);

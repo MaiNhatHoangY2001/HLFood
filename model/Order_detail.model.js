@@ -11,6 +11,11 @@ const order_detail = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    status: {
+        type: Boolean,
+        required: true,
+        trim: true,
+    },
     food:
     {
         type: mongoose.Schema.Types.ObjectId,
