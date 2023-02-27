@@ -9,12 +9,11 @@ const table = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    bookings: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Booking",
-        }
-    ],
+    order: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+    }
+    ,
     employee:
     {
         type: mongoose.Schema.Types.ObjectId,

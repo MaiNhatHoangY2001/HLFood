@@ -1,4 +1,4 @@
-const tableController = require("../controllers/tableController");
+const tableController = require("../controllers/table.controller");
 
 const router = require("express").Router();
 
