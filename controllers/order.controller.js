@@ -2,9 +2,22 @@ const Employee = require("../model/Employee.model");
 const Order = require("../model/Order.model");
 const Customer = require("../model/Customer.model");
 const Table = require("../model/Table.model");
+const Order_detail = require("../model/Order_detail.model");
+const Food = require("../model/Food.model");
 
 
 const orderController = {
+
+    getOrder: async (req, res) => {
+        try {
+            const order = await Order.find(req.body).populate("tables order_details");
+
+            res.status(200).json(order);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+
     //ADD ORDER
     addOrder: async (req, res) => {
         try {
@@ -40,7 +53,28 @@ const orderController = {
             const tables = await Table.find({ "table_num": { "$in": tablesInput } })
             await Order.updateOne({ "_id": saveOrder._id }, { $set: { tables: tables } });
 
-            res.status(200).json("Add successfully");
+            res.status(200).json(saveOrder._id);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    // Booking Food
+    addOrderDetail: async (req, res) => {
+        try {
+            const newOrderDetail = new Order_detail(req.body);
+            const saveOrder = await newOrderDetail.save();
+
+            if (req.body.food) {
+                const food = Food.findById(req.body.food);
+                await food.updateOne({ $push: { order_details: saveOrder._id } });
+            }
+
+            if (req.body.order) {
+                const food = Order.findById(req.body.order);
+                await food.updateOne({ $push: { order_details: saveOrder._id } });
+            }
+
+            res.status(200).json(saveOrder);
         } catch (error) {
             res.status(500).json(error);
         }
