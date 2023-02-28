@@ -23,6 +23,14 @@ const empController = {
       return saveUser
     } else
       return cus
+  },
+  getAllEmp: async (req, res) => {
+    try {
+      const emps = await Employee.find();
+      res.status(200).json(emps);
+    } catch (error) {
+      res.status(500).json(error);
+    }
   }
 };
 
