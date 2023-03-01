@@ -4,6 +4,7 @@ const Customer = require("../model/Customer.model");
 const Table = require("../model/Table.model");
 const Order_detail = require("../model/Order_detail.model");
 const Food = require("../model/Food.model");
+const schedule = require('node-schedule');
 
 
 const orderController = {
@@ -48,11 +49,16 @@ const orderController = {
             }
 
             //Modify table
-            const tablesInput = req.body.bookingTable.split(",").map(Number);
-            await Table.updateMany({ "table_num": { "$in": tablesInput } }, { $set: { order: saveOrder._id } });
-
-            const tables = await Table.find({ "table_num": { "$in": tablesInput } })
-            await Order.updateOne({ "_id": saveOrder._id }, { $set: { tables: tables } });
+            if (!req.body.time_booking) {
+                const tablesInput = req.body.bookingTable.split(",").map(Number);
+                await Table.updateMany({ "table_num": { "$in": tablesInput } }, { $set: { order: saveOrder._id } });
+    
+                const tables = await Table.find({ "table_num": { "$in": tablesInput } })
+                await Order.updateOne({ "_id": saveOrder._id }, { $set: { tables: tables } });
+            }else {
+                const timeBooking = new Date (req.body.time_booking)
+            }
+          
 
             res.status(200).json(saveOrder._id);
         } catch (error) {
