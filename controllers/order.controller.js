@@ -17,20 +17,23 @@ const orderController = {
             }
 
 
-            //Add Customer or  Modify Customer
-            const cus = await Customer.findOne({ phone_num: req.body.customerPhone });
+            if (req.body.customerPhone) {
+                //Add Customer or  Modify Customer
+                const cus = await Customer.findOne({ phone_num: req.body.customerPhone });
 
-            if (!cus) {
-                const newCus = new Customer({ name: req.body.customerName, phone_num: req.body.customerPhone, order: [saveOrder._id] });
-                const cusSave = await newCus.save();
-                //Save customer id in order
-                await Order.updateOne({ "_id": saveOrder._id }, { $set: { customer: cusSave._id } });
+                if (!cus) {
+                    const newCus = new Customer({ name: req.body.customerName, phone_num: req.body.customerPhone, order: [saveOrder._id] });
+                    const cusSave = await newCus.save();
+                    //Save customer id in order
+                    await Order.updateOne({ "_id": saveOrder._id }, { $set: { customer: cusSave._id } });
+                }
+                else {
+                    //Save customer id in order and order id in customer
+                    await Order.updateOne({ "_id": saveOrder._id }, { $set: { customer: cus._id } });
+                    await Customer.updateOne({ "_id": cus._id }, { $push: { order: saveOrder._id } });
+                }
             }
-            else {
-                //Save customer id in order and order id in customer
-                await Order.updateOne({ "_id": saveOrder._id }, { $set: { customer: cus._id } });
-                await Customer.updateOne({ "_id": cus._id }, { $push: { order: saveOrder._id } });
-            }
+            
 
 
             //Modify table
