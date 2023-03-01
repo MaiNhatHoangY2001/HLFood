@@ -33,8 +33,6 @@ const orderController = {
                     await Customer.updateOne({ "_id": cus._id }, { $push: { order: saveOrder._id } });
                 }
             }
-            
-
 
             //Modify table
             const tablesInput = req.body.bookingTable.split(",").map(Number);
