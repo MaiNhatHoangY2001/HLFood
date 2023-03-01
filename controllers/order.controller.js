@@ -31,6 +31,7 @@ const orderController = {
                 await Order.updateOne({ "_id": saveOrder._id }, { $set: { customer: cus._id } });
                 await Customer.updateOne({ "_id": cus._id }, { $push: { order: saveOrder._id } });
             }
+            
 
 
             //Modify table
