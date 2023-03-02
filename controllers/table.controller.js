@@ -2,12 +2,12 @@ const Table = require("../model/Table.model");
 const Employee = require("../model/Employee.model");
 
 const tableController = {
+
     getAllTable: async (req, res) => {
         try {
 
-            const listTable = await Table.find();
-
-
+            const listTable = await Table.find(req.query);
+            
             res.status(200).json(listTable);
         } catch (error) {
             res.status(500).json(error);
