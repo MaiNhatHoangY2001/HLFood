@@ -9,12 +9,11 @@ const order_detail = new mongoose.Schema({
     },
     total_detail_price: {
         type: Number,
-        required: true,
+        default: 0
     },
     status: {
         type: Boolean,
-        required: true,
-        trim: true,
+        default: false
     },
     food:
     {
@@ -34,7 +33,7 @@ order_detail.pre('save', async function (next) {
         this.total_detail_price = food.price * this.quantity;
         //Save total_order_price in order
         const order = await OrderModel.findById(this.order);
-        order.total_order_price += this.total_detail_price * order.vat;
+        order.total_order_price += this.total_detail_price + this.total_detail_price * order.vat;
         await order.save();
         next();
     } catch (err) {
