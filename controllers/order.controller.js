@@ -4,7 +4,6 @@ const Customer = require("../model/Customer.model");
 const Table = require("../model/Table.model");
 const Order_detail = require("../model/Order_detail.model");
 const Food = require("../model/Food.model");
-const schedule = require('node-schedule');
 
 
 const orderController = {
@@ -27,7 +26,7 @@ const orderController = {
 
             if (req.body.employee) {
                 const emp = Employee.findById(req.body.employee);
-                emp.updateOne({ $push: { orders: saveOrder._id } });
+                await emp.updateOne({ $push: { orders: saveOrder._id } });
             }
 
 
@@ -48,15 +47,18 @@ const orderController = {
 
             //Modify table
             if (!req.body.time_booking) {
-                const tablesInput = req.body.bookingTable.split(",").map(Number);
-                await Table.updateMany({ "table_num": { "$in": tablesInput } }, { $set: { order: saveOrder._id } });
-    
-                const tables = await Table.find({ "table_num": { "$in": tablesInput } })
-                await Order.updateOne({ "_id": saveOrder._id }, { $set: { tables: tables } });
-            }else {
-                const timeBooking = new Date (req.body.time_booking)
+                this.bookingTable(req.body.bookingTable, saveOrder);
+            } else {
+                const timeBooking = new Date(req.body.time_booking)
+                const reminderTime = new Date(timeBooking.getTime() - 60 * 60 * 1000);
+                const delay = reminderTime.getTime() - Date.now()
+                //schedule table when customer booking
+                setTimeout(() => {
+                    console.log("Running");
+                    bookingTable(req.body.bookingTable, saveOrder);
+                }, delay);
             }
-          
+
 
             res.status(200).json(saveOrder._id);
         } catch (error) {
@@ -105,6 +107,15 @@ const orderController = {
         }
     },
 
+
 };
+
+async function bookingTable(bookingTable, saveOrder) {
+    const tablesInput = bookingTable.split(",").map(Number);
+    await Table.updateMany({ "table_num": { "$in": tablesInput } }, { $set: { order: saveOrder._id } });
+
+    const tables = await Table.find({ "table_num": { "$in": tablesInput } })
+    await Order.updateOne({ "_id": saveOrder._id }, { $set: { tables: tables } });
+}
 
 module.exports = orderController;
