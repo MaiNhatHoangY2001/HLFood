@@ -17,6 +17,10 @@ const food = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    type: {
+        type: Number,
+        require: true,
+    },
     order_details: [
         {
             type: mongoose.Schema.Types.ObjectId,
