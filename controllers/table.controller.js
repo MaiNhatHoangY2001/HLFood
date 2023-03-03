@@ -7,8 +7,18 @@ const tableController = {
         try {
 
             const listTable = await Table.find(req.query);
-            
+
             res.status(200).json(listTable);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    updateStatus: async (req, res) => {
+        try {
+            console.log(req.query.id);
+            const table = Table.findById(req.query.id);
+            await table.updateOne({ $set: { "status": req.body.status } });
+            res.status(200).json("Update successfully");
         } catch (error) {
             res.status(500).json(error);
         }
