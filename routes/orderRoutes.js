@@ -6,7 +6,9 @@ router.get("/order", orderController.getOrder);
 
 router.post("/order", orderController.addOrder);
 
-router.post("/bookingFood", orderController.addOrderDetail);
+router.post("/booking/food", orderController.addOrderDetail);
+
+router.post("/booking/foods", orderController.addListOrderDetail);
 
 
 module.exports = router;
