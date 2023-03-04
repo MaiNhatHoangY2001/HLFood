@@ -69,15 +69,36 @@ const orderController = {
             }
 
             if (req.body.order) {
-                const food = Order.findById(req.body.order);
-                await food.updateOne({ $push: { order_details: saveOrder._id } });
+                const order = Order.findById(req.body.order);
+                await order.updateOne({ $push: { order_details: saveOrder._id } });
             }
 
             res.status(200).json(saveOrder);
         } catch (error) {
             res.status(500).json(error);
         }
-    }
+    },
+    // Booking Food
+    addListOrderDetail: async (req, res) => {
+        try {
+            const orderDetails = req.body.orderDetails;
+            orderDetails.forEach(async (orderDetail) => {
+                const newOrderDetail = new Order_detail(orderDetail);
+                const saveOrder = await newOrderDetail.save();
+
+                const food = Food.findById(orderDetail.food);
+                await food.updateOne({ $push: { order_details: saveOrder._id } });
+
+                const order = Order.findById(orderDetail.order);
+                await order.updateOne({ $push: { order_details: saveOrder._id } });
+            })
+
+            res.status(200).json("Add List Food Succesfully");
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+
 };
 
 module.exports = orderController;
