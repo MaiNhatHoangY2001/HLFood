@@ -10,7 +10,10 @@ const orderController = {
 
     getOrder: async (req, res) => {
         try {
-            const order = await Order.find(req.body).populate("tables order_details");
+            const order = await Order.find(req.body).populate("tables order_details").populate({
+                path: 'order_details',
+                populate: { path: 'food' }
+            });
 
             res.status(200).json(order);
         } catch (error) {
@@ -26,7 +29,7 @@ const orderController = {
 
             if (req.body.employee) {
                 const emp = Employee.findById(req.body.employee);
-                emp.updateOne({ $push: { orders: saveOrder._id } });
+                await emp.updateOne({ $push: { orders: saveOrder._id } });
             }
 
 
@@ -48,11 +51,19 @@ const orderController = {
             }
 
             //Modify table
-            const tablesInput = req.body.bookingTable.split(",").map(Number);
-            await Table.updateMany({ "table_num": { "$in": tablesInput } }, { $set: { order: saveOrder._id } });
+            if (!req.body.time_booking) {
+                this.bookingTable(req.body.bookingTable, saveOrder);
+            } else {
+                const timeBooking = new Date(req.body.time_booking)
+                const reminderTime = new Date(timeBooking.getTime() - 60 * 60 * 1000);
+                const delay = reminderTime.getTime() - Date.now()
+                //schedule table when customer booking
+                setTimeout(() => {
+                    console.log("Running");
+                    bookingTable(req.body.bookingTable, saveOrder);
+                }, delay);
+            }
 
-            const tables = await Table.find({ "table_num": { "$in": tablesInput } })
-            await Order.updateOne({ "_id": saveOrder._id }, { $set: { tables: tables } });
 
             res.status(200).json(saveOrder._id);
         } catch (error) {
@@ -71,15 +82,45 @@ const orderController = {
             }
 
             if (req.body.order) {
-                const food = Order.findById(req.body.order);
-                await food.updateOne({ $push: { order_details: saveOrder._id } });
+                const order = Order.findById(req.body.order);
+                await order.updateOne({ $push: { order_details: saveOrder._id } });
             }
 
             res.status(200).json(saveOrder);
         } catch (error) {
             res.status(500).json(error);
         }
-    }
+    },
+    // Booking Food
+    addListOrderDetail: async (req, res) => {
+        try {
+            const orderDetails = req.body.orderDetails;
+            orderDetails.forEach(async (orderDetail) => {
+                const newOrderDetail = new Order_detail(orderDetail);
+                const saveOrder = await newOrderDetail.save();
+
+                const food = Food.findById(orderDetail.food);
+                await food.updateOne({ $push: { order_details: saveOrder._id } });
+
+                const order = Order.findById(orderDetail.order);
+                await order.updateOne({ $push: { order_details: saveOrder._id } });
+            })
+
+            res.status(200).json("Add List Food Succesfully");
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+
+
 };
+
+async function bookingTable(bookingTable, saveOrder) {
+    const tablesInput = bookingTable.split(",").map(Number);
+    await Table.updateMany({ "table_num": { "$in": tablesInput } }, { $set: { order: saveOrder._id } });
+
+    const tables = await Table.find({ "table_num": { "$in": tablesInput } })
+    await Order.updateOne({ "_id": saveOrder._id }, { $set: { tables: tables } });
+}
 
 module.exports = orderController;
