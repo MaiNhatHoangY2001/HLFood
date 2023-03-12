@@ -10,7 +10,10 @@ const orderController = {
 
     getOrder: async (req, res) => {
         try {
-            const order = await Order.find(req.body).populate("tables order_details");
+            const order = await Order.find(req.body).populate("tables order_details").populate({
+                path: 'order_details',
+                populate: { path: 'food' }
+            });
 
             res.status(200).json(order);
         } catch (error) {
