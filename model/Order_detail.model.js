@@ -23,6 +23,10 @@ const order_detail = new mongoose.Schema({
     order: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Order",
+    },
+    history_order: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "HistoryOrder",
     }
 })
 
