@@ -37,16 +37,28 @@ const employee = new mongoose.Schema({
       ref: "Tables",
     }
   ],
-  shifts:[
+  shifts: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shift",
     }
   ],
-  orders:[
+  orders: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
+    }
+  ],
+  inventories: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Inventory"
+    }
+  ],
+  notifications: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Notification"
     }
   ]
 });
