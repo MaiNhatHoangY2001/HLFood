@@ -4,7 +4,7 @@ const ingredient = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-    }, 
+    },
     image: {
         type: String,
         require: true,
@@ -13,7 +13,11 @@ const ingredient = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    type: {
+    quantitative: {
+        type: Number,
+        require: true,
+    },
+    type_quantitative: {
         type: Number,
         require: true,
     },

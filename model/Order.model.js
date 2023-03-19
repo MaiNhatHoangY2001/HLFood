@@ -53,12 +53,6 @@ const order = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Employee",
     },
-    notifications: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Notification"
-        }
-    ],
     history_order: [
         {
             type: mongoose.Schema.Types.ObjectId,

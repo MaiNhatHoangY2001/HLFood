@@ -26,7 +26,13 @@ const food = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "OrderDetail",
         }
-    ]
+    ],
+    food_details: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "FoodDetail",
+        }
+    ],
 });
 
 module.exports = mongoose.model("Food", food);

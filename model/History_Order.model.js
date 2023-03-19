@@ -15,7 +15,13 @@ const historyOrder = new mongoose.Schema({
     order: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Order"
-    }
+    },
+    notifications: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Notification",
+        }
+    ],
 });
 
 
