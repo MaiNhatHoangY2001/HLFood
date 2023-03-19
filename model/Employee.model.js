@@ -60,7 +60,11 @@ const employee = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Notification"
     }
-  ]
+  ],
+  receipt: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Receipt"
+  },
 });
 
 hasingPass(employee);
