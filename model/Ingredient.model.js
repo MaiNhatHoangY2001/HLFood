@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const food = new mongoose.Schema({
+const ingredient = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -13,22 +13,20 @@ const food = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    type: {
+    quantitative: {
         type: Number,
         require: true,
     },
-    order_details: [
+    type_quantitative: {
+        type: Number,
+        require: true,
+    },
+    food_details: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "OrderDetail",
         }
-    ],
-    food_details: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "FoodDetail",
-        }
-    ],
+    ]
 });
 
-module.exports = mongoose.model("Food", food);
+module.exports = mongoose.model("Ingredient", ingredient);
