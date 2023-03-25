@@ -15,6 +15,9 @@ const order_detail = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    description: {
+        type: String,
+    },
     food:
     {
         type: mongoose.Schema.Types.ObjectId,
