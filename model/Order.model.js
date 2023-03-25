@@ -52,8 +52,13 @@ const order = new mongoose.Schema({
     employee: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Employee",
-    }
-
+    },
+    history_order: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "HistoryOrder",
+        }
+    ]
 })
 
 module.exports = mongoose.model("Order", order);

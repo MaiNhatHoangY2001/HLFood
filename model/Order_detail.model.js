@@ -15,6 +15,9 @@ const order_detail = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    description: {
+        type: String,
+    },
     food:
     {
         type: mongoose.Schema.Types.ObjectId,
@@ -23,6 +26,10 @@ const order_detail = new mongoose.Schema({
     order: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Order",
+    },
+    history_order: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "HistoryOrder",
     }
 })
 
