@@ -21,7 +21,7 @@ const ingredient = new mongoose.Schema({
         type: Number,
         require: true,
     },
-    order_details: [
+    food_details: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "OrderDetail",
