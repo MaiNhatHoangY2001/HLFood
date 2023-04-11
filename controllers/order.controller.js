@@ -21,7 +21,6 @@ const orderController = {
 
     getOrder: async (req, res) => {
         try {
-            console.log(req.query.id);
             const order = await Order.findById(req.query.id).populate("tables order_details").populate({
                 path: 'order_details',
                 populate: { path: 'food' }
@@ -84,34 +83,34 @@ const orderController = {
     addListOrderDetail: async (req, res) => {
         try {
             const orderDetails = req.body.orderDetails;
-            let idOrderDetails = [];
 
             for (const orderDetail of orderDetails) {
-                const checkFood = await Order_detail.findOne({ food: orderDetail.food, order: orderDetail.order });
-                if (checkFood) {
-                    const orderDetailOld = Order_detail.findById(checkFood._id);
-                    const food = await Food.findById(orderDetail.food);
-                    const quantityNew = checkFood.quantity + orderDetail.quantity;
-                    await orderDetailOld.updateOne({ $set: { quantity: quantityNew, total_detail_price: food.price * quantityNew } });
+                const orderDetailAwait = await Order_detail.findOne({ food: orderDetail.food, order: orderDetail.order });
+                if (orderDetailAwait) {
 
-                    idOrderDetails = [...idOrderDetails, checkFood._id.toString()];
+                    const orderDetailOld = Order_detail.findById(orderDetailAwait._id);
+                    const food = await Food.findById(orderDetail.food);
+
+                    const quantityNew = orderDetailAwait.quantity + orderDetail.quantity;
+                    const totalDetailPrice = food.price * quantityNew;
+                    //Update price 
+                    await orderDetailOld.updateOne({ $set: { quantity: quantityNew, total_detail_price: totalDetailPrice } });
                 } else {
                     const newOrderDetail = new Order_detail(orderDetail);
                     const saveOrder = await newOrderDetail.save();
                     const food = Food.findById(orderDetail.food);
                     await food.updateOne({ $push: { order_details: saveOrder._id } });
+
                     const order = Order.findById(orderDetail.order);
                     await order.updateOne({ $push: { order_details: saveOrder._id } });
-                    idOrderDetails = [...idOrderDetails, newOrderDetail._id.toString()];
                 }
+
+
+                //Add Histoty Order
+                addOrderHistory(orderDetail);
             }
 
-            //Add Histoty Order
-            const newHistoryOrder = new History_Order({
-                order_details: idOrderDetails,
-                order: orderDetails[0].order
-            })
-            await newHistoryOrder.save();
+
 
             res.status(200).json("Add Food Succesfully");
         } catch (error) {
@@ -128,6 +127,21 @@ async function bookingTable(bookingTable, saveOrder) {
 
     const tables = await Table.find({ "table_num": { "$in": tablesInput } })
     await Order.updateOne({ "_id": saveOrder._id }, { $set: { tables: tables } });
+}
+
+async function addOrderHistory(orderDetail) {
+    const newHistoryOrder = new History_Order({
+        quantity: orderDetail.quantity,
+        food: orderDetail.food,
+        order: orderDetail.order
+    })
+    const saveHistoryOrder = await newHistoryOrder.save();
+    //Add id historuy order
+    const order = Order.findById(orderDetail.order);
+    await order.updateOne({ $push: { history_order: saveHistoryOrder._id } });
+    //Add id food
+    const food = Food.findById(orderDetail.order);
+    await food.updateOne({ $push: { history_order: saveHistoryOrder._id } });
 }
 
 module.exports = orderController;
