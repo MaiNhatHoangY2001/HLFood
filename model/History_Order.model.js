@@ -5,13 +5,14 @@ const historyOrder = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-
-    order_details: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "OrderDetail",
-        }
-    ],
+    quantity: {
+        type: Number,
+        default: 1,
+    },
+    food: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Food"
+    },
     order: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Order"
