@@ -11,10 +11,6 @@ const order_detail = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    status: {
-        type: Boolean,
-        default: false
-    },
     description: {
         type: String,
     },
@@ -26,10 +22,6 @@ const order_detail = new mongoose.Schema({
     order: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Order",
-    },
-    history_order: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "HistoryOrder",
     }
 })
 

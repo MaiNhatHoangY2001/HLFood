@@ -17,9 +17,9 @@ const notification = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Employee"
     },
-    history_order: {
+    order: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "HistoryOrder"
+        ref: "Order"
     }
 });
 
