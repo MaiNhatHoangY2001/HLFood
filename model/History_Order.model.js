@@ -9,6 +9,10 @@ const historyOrder = new mongoose.Schema({
         type: Number,
         default: 1,
     },
+    status: {
+        type: Number,
+        default: 0
+    },
     food: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Food"
