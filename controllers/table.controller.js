@@ -15,7 +15,6 @@ const tableController = {
     },
     updateStatus: async (req, res) => {
         try {
-            console.log(req.query.id);
             const table = Table.findById(req.query.id);
             await table.updateOne({ $set: { "status": req.body.status } });
             res.status(200).json("Update successfully");

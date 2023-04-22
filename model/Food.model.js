@@ -23,12 +23,6 @@ const food = new mongoose.Schema({
             ref: "OrderDetail",
         }
     ],
-    history_order: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "HistoryOrder",
-        }
-    ],
     food_details: [
         {
             type: mongoose.Schema.Types.ObjectId,
