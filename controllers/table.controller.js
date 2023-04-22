@@ -1,5 +1,7 @@
 const Table = require("../model/Table.model");
 const Employee = require("../model/Employee.model");
+const Order = require("../model/Order.model");
+
 
 const tableController = {
 
@@ -41,6 +43,38 @@ const tableController = {
             res.status(500).json(error);
         }
     },
+    udpateTableOrder: async (req, res) => {
+        try {
+            const idOrder = req.body.order_id;
+
+            const orders = await Order.findById(idOrder);
+            const idTables = orders?.tables;
+
+            deleteTableOrder(idTables, idOrder)
+
+            addTableOrder(req.body.table, idOrder)
+
+            res.status(200).json("Update successfully");
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
 };
+
+
+async function deleteTableOrder(idTables, idOrder) {
+    for (const id of idTables) {
+        await Table.updateOne({ _id: id }, { $unset: { order: 1 } })
+    }
+    await Order.updateOne({ _id: idOrder }, { $unset: { tables: 1 } })
+}
+
+async function addTableOrder(idTables, idOrder) {
+    for (const id of idTables) {
+        await Table.updateOne({ _id: id }, { $set: { order: idOrder } })
+    }
+    await Order.updateOne({ _id: idOrder }, { $set: { tables: idTables } })
+}
+
 
 module.exports = tableController;
