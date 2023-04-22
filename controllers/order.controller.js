@@ -19,7 +19,7 @@ const orderController = {
 
     getOrder: async (req, res) => {
         try {
-            const order = await Order.findById(req.query.id).populate("tables history_order order_details").populate({
+            const order = await Order.findById(req.query.id).populate("tables order_details").populate({
                 path: 'order_details',
                 populate: { path: 'food' }
             });
