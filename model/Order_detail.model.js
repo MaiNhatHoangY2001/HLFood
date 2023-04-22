@@ -3,6 +3,10 @@ const FoodModel = require("./Food.model");
 const OrderModel = require("./Order.model");
 
 const order_detail = new mongoose.Schema({
+    time_created: {
+        type: Date,
+        default: Date.now,
+    },
     quantity: {
         type: Number,
         default: 1,
@@ -13,6 +17,10 @@ const order_detail = new mongoose.Schema({
     },
     description: {
         type: String,
+    },
+    status: {
+        type: Number,
+        default: 0
     },
     food:
     {
