@@ -52,7 +52,7 @@ const tableController = {
 
             await deleteTableOrder(idTables, idOrder)
 
-            await addTableOrder(req.body.table, idOrder)
+            await addTableOrder(req.body.table, idOrder, req.body.status)
 
             res.status(200).json("Update successfully");
         } catch (error) {
@@ -64,15 +64,14 @@ const tableController = {
 
 async function deleteTableOrder(idTables, idOrder) {
     for (const id of idTables) {
-        await Table.updateOne({ _id: id }, { $unset: { order: 1 } }, { $set: { status: 0 } })
+        await Table.updateOne({ _id: id }, { $unset: { order: 1 }, $set: { status: 0 } })
     }
     await Order.updateOne({ _id: idOrder }, { $unset: { tables: 1 } })
 }
 
-async function addTableOrder(tables, idOrder) {
-    const idTables = tables.map(table => table.id);
-    for (const table of tables) {
-        await Table.updateOne({ _id: table.id }, { $set: { order: idOrder, status: table.status } })
+async function addTableOrder(idTables, idOrder, status) {
+    for (const id of idTables) {
+        await Table.updateOne({ _id: id }, { $set: { order: idOrder, status: status } })
     }
     await Order.updateOne({ _id: idOrder }, { $set: { tables: [...idTables] } })
 }
