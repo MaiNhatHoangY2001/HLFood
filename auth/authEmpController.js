@@ -67,9 +67,9 @@ const authController = {
   //LOGIN
   loginUser: async (req, res) => {
     try {
-      const user = await Employee.findOne({ phoneNumber: req.body.phoneNumber });
+      const user = await Employee.findOne({ username: req.body.username });
       if (!user) {
-        return res.status(404).json("Wrong phoneNumber");
+        return res.status(404).json("Wrong username");
       }
 
       const validPassword = await bcrypt.compare(
