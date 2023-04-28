@@ -34,6 +34,12 @@ const order_detail = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Order',
 	},
+	notifications: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Notification',
+		},
+	],
 });
 
 order_detail.pre('save', async function (next) {

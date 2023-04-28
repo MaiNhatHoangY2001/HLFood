@@ -22,7 +22,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const empRoutes = require('./routes/empRoutes');
 const ingredientRoutes = require('./routes/ingredientRoutes');
 const receiptRoutes = require('./routes/receiptRoutes');
-
+const notifiRoutes = require('./routes/notificationRoutes');
 
 
 
@@ -66,6 +66,8 @@ app.use("/api", orderRoutes);
 app.use("/api", receiptRoutes);
 app.use("/api", empRoutes);
 app.use("/api", ingredientRoutes);
+app.use("/api", notifiRoutes);
+
 
 
 
