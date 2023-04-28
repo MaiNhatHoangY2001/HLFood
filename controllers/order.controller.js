@@ -58,11 +58,6 @@ const orderController = {
                     await Customer.updateOne({ "_id": cus._id }, { $push: { order: saveOrder._id } });
                 }
             }
-            else {
-                //Save customer id in order and order id in customer
-                await Order.updateOne({ "_id": saveOrder._id }, { $set: { customer: cus._id } });
-                await Customer.updateOne({ "_id": cus._id }, { $push: { order: saveOrder._id } });
-            }
 
             //Modify table
             if (!req.body.time_booking) {

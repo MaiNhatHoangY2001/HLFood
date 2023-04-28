@@ -52,14 +52,7 @@ const order = new mongoose.Schema({
     employee: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Employee",
-    },
-
-    notification: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Notification",
-        }
-    ],
+    }
 })
 
 module.exports = mongoose.model("Order", order);
