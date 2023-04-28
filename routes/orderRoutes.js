@@ -12,6 +12,8 @@ router.post("/order", orderController.addOrder);
 
 router.get("/order_details", orderDetailController.getAllOrderDetail);
 
+router.put("/order_details:status", orderDetailController.changeFoodStatus);
+
 router.post("/booking/food", orderDetailController.addListOrderDetail);
 
 router.put("/booking/food", orderDetailController.updateOrderDetails);
