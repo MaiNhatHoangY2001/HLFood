@@ -26,7 +26,7 @@ const empController = {
   },
   getAllEmp: async (req, res) => {
     try {
-      const emps = await Employee.find();
+      const emps = await Employee.find().populate("tables");
       res.status(200).json(emps);
     } catch (error) {
       res.status(500).json(error);
