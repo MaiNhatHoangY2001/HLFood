@@ -36,7 +36,7 @@ const employee = new mongoose.Schema({
 	tables: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Tables',
+			ref: 'Table',
 		},
 	],
 	shifts: [
