@@ -1,14 +1,11 @@
-const tableController = require("../controllers/table.controller");
+const tableController = require('../controllers/table.controller');
+const middlewareController = require('../middleware/middlewareController');
 
-const router = require("express").Router();
+const router = require('express').Router();
 
-router.get("/tables", tableController.getAllTable);
-router.put("/tables/emps", tableController.setEmpTable);
-router.put("/tables/status", tableController.updateStatus);
-router.post("/tables:order", tableController.udpateTableOrder);
-
-
-
-
+router.get('/tables', middlewareController.verifyToken, tableController.getAllTable);
+router.put('/tables/emps', middlewareController.verifyToken, tableController.setEmpTable);
+router.put('/tables/status', middlewareController.verifyToken, tableController.updateStatus);
+router.post('/tables:order', middlewareController.verifyToken, tableController.udpateTableOrder);
 
 module.exports = router;

@@ -1,23 +1,25 @@
 const orderController = require("../controllers/order.controller");
 const orderDetailController = require("../controllers/order_detail.controller");
+const middlewareController = require('../middleware/middlewareController');
+
 
 
 const router = require("express").Router();
 
-router.get("/orders", orderController.getAllOrder);
+router.get("/orders", middlewareController.verifyToken, orderController.getAllOrder);
 
-router.get("/order", orderController.getOrder);
+router.get("/order", middlewareController.verifyToken, orderController.getOrder);
 
-router.post("/order", orderController.addOrder);
+router.post("/order", middlewareController.verifyToken, orderController.addOrder);
 
-router.get("/order_details", orderDetailController.getAllOrderDetail);
+router.get("/order_details", middlewareController.verifyToken, orderDetailController.getAllOrderDetail);
 
-router.put("/order_details:status", orderDetailController.changeFoodStatus);
+router.put("/order_details:status", middlewareController.verifyToken, orderDetailController.changeFoodStatus);
 
-router.post("/booking/food", orderDetailController.addListOrderDetail);
+router.post("/booking/food", middlewareController.verifyToken, orderDetailController.addListOrderDetail);
 
-router.put("/booking/food", orderDetailController.updateOrderDetails);
+router.put("/booking/food", middlewareController.verifyToken, orderDetailController.updateOrderDetails);
 
-router.delete("/booking/food/:id", orderDetailController.deleteOrderDetail);
+router.delete("/booking/food/:id",middlewareController.verifyToken, orderDetailController.deleteOrderDetail);
 
 module.exports = router;
