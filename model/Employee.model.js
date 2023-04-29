@@ -22,6 +22,9 @@ const employee = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  refreshToken: {
+    type: String,
+  },
   job_title: {
     type: String,
     required: true,
