@@ -26,9 +26,8 @@ const employee = new mongoose.Schema({
 		type: String,
 	},
 	job_title: {
-		type: String,
+		type: Number,
 		required: true,
-		trim: true,
 	},
 	admin: {
 		type: Boolean,
