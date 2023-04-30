@@ -20,8 +20,6 @@ const foodRoutes = require('./routes/foodRoutes');
 const tableRoutes = require('./routes/tableRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const empRoutes = require('./routes/empRoutes');
-const ingredientRoutes = require('./routes/ingredientRoutes');
-const receiptRoutes = require('./routes/receiptRoutes');
 const notifiRoutes = require('./routes/notificationRoutes');
 
 
@@ -63,9 +61,7 @@ app.use("/auth", authEmp);
 app.use("/api", foodRoutes);
 app.use("/api", tableRoutes);
 app.use("/api", orderRoutes);
-app.use("/api", receiptRoutes);
 app.use("/api", empRoutes);
-app.use("/api", ingredientRoutes);
 app.use("/api", notifiRoutes);
 
 

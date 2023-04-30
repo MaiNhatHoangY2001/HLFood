@@ -39,34 +39,19 @@ const employee = new mongoose.Schema({
 			ref: 'Table',
 		},
 	],
-	shifts: [
-		{
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Shift',
-		},
-	],
 	orders: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Order',
 		},
 	],
-	inventories: [
-		{
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Inventory',
-		},
-	],
+
 	notifications: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Notification',
 		},
 	],
-	receipt: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Receipt',
-	},
 });
 
 hasingPass(employee);
