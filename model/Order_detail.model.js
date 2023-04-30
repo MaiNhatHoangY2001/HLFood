@@ -26,6 +26,10 @@ const order_detail = new mongoose.Schema({
 		type: Number,
 		default: 0,
 	},
+	food: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Food',
+	},
 	order: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Order',
