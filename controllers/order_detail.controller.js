@@ -5,7 +5,7 @@ const Order = require('../model/Order.model');
 const orderDetailController = {
 	getAllOrderDetail: async (_req, res) => {
 		try {
-			const orderDetails = await Order_detail.find();
+			const orderDetails = await Order_detail.find().populate("food");
 			res.status(200).json(orderDetails);
 		} catch (error) {
 			res.status(500).json(error);

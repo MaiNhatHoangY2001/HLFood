@@ -4,10 +4,7 @@ const foodController = {
     getAllFood: async (req, res) => {
         try {
 
-            const listFood = await Food.find().populate("food_details").populate({
-                path: 'food_details',
-                populate: { path: 'ingredient' }
-            });
+            const listFood = await Food.find()
 ;
             res.status(200).json(listFood);
         } catch (error) {
