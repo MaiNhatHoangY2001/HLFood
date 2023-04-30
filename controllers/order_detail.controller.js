@@ -5,7 +5,12 @@ const Order = require('../model/Order.model');
 const orderDetailController = {
 	getAllOrderDetail: async (_req, res) => {
 		try {
-			const orderDetails = await Order_detail.find().populate("food");
+			const orderDetails = await Order_detail.find()
+				.populate('food order')
+				.populate({
+					path: 'order',
+					populate: { path: 'tables' },
+				});
 			res.status(200).json(orderDetails);
 		} catch (error) {
 			res.status(500).json(error);
@@ -96,7 +101,7 @@ const orderDetailController = {
 			const orderDetail = Order_detail.findById(id);
 			await orderDetail.updateOne({ $set: { quantity_finished: quantityFinish, status: status } });
 
-			res.status(200).json("Update status successfully");
+			res.status(200).json('Update status successfully');
 		} catch (error) {
 			res.status(500).json(error);
 		}
