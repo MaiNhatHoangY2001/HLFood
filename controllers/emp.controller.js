@@ -25,12 +25,20 @@ const empController = {
 	},
 	getAllEmp: async (req, res) => {
 		try {
-			const emps = await Employee.find().populate('tables');
+			const emps = await Employee.find()
 			res.status(200).json(emps);
 		} catch (error) {
 			res.status(500).json(error);
 		}
 	},
+  getAllEmpActive: async (req, res) => {
+    try {
+			const emps = await Employee.find({is_deleted: false}).populate('tables');
+			res.status(200).json(emps);
+		} catch (error) {
+			res.status(500).json(error);
+		}
+  },
 	deleteEmp: async (req, res) => {
 		try {
 			const emp = await Employee.findById(req.query.id);
