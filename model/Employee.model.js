@@ -16,6 +16,7 @@ const employee = new mongoose.Schema({
 		type: String,
 		required: true,
 		trim: true,
+		unique: true,
 	},
 	password: {
 		type: String,
@@ -28,6 +29,10 @@ const employee = new mongoose.Schema({
 	job_title: {
 		type: Number,
 		required: true,
+	},
+	is_deleted: {
+		type: Boolean,
+		default: false,
 	},
 	admin: {
 		type: Boolean,

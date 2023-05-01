@@ -5,5 +5,6 @@ const router = require('express').Router();
 
 router.get('/foods', middlewareController.verifyToken, foodController.getAllFood);
 router.post('/food', middlewareController.verifyToken, foodController.addFood);
+router.delete('/food', middlewareController.verifyToken, foodController.deleteFood);
 
 module.exports = router;

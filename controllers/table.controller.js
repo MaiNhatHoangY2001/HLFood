@@ -27,13 +27,12 @@ const tableController = {
 
 			//Update employee in table
 			const listTableWithNum = Table.find({ table_num: { $in: tablesInput } });
+			await Table.updateMany({ employee: empId }, { $unset: { employee: 1 } });
 			await Table.updateMany({ table_num: { $in: tablesInput } }, { $set: { employee: empId } });
 
 			//Update tables in employee
 			const employee = Employee.findById(empId);
 			const arrayIds = await listTableWithNum.distinct('_id');
-
-			await Table.updateMany({ employee: empId }, { $unset: { employee: 1 } });
 			await employee.updateOne({ $set: { tables: arrayIds } });
 
 			res.status(200).json('Update successfully');
