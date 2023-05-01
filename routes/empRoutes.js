@@ -7,5 +7,6 @@ router.get('/employees', middlewareController.verifyTokenAndAdminAuth, empContro
 router.get('/employees:active', middlewareController.verifyTokenAndAdminAuth, empController.getAllEmpActive);
 router.get('/employees', middlewareController.verifyTokenAndAdminAuth, empController.addEmp);
 router.delete('/employee', middlewareController.verifyTokenAndAdminAuth, empController.deleteEmp);
+router.put('/employee', middlewareController.verifyTokenAndAdminAuth, empController.updateEmp);
 
 module.exports = router;

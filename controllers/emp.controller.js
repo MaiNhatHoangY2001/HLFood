@@ -13,6 +13,15 @@ const empController = {
 			res.status(500).json(error);
 		}
 	},
+	updateEmp: async (req, res) => {
+		try {
+			const emp = await Employee.findById(req.query.id);
+			await emp.updateOne({ $set: { ...req.body } });
+			res.status(200).json('Update emp successfuly');
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
 	checkEmp: async (profile) => {
 		const cus = await Customer.findOne({ email: profile.email });
 
@@ -25,20 +34,20 @@ const empController = {
 	},
 	getAllEmp: async (req, res) => {
 		try {
-			const emps = await Employee.find()
+			const emps = await Employee.find();
 			res.status(200).json(emps);
 		} catch (error) {
 			res.status(500).json(error);
 		}
 	},
-  getAllEmpActive: async (req, res) => {
-    try {
-			const emps = await Employee.find({is_deleted: false}).populate('tables');
+	getAllEmpActive: async (req, res) => {
+		try {
+			const emps = await Employee.find({ is_deleted: false }).populate('tables');
 			res.status(200).json(emps);
 		} catch (error) {
 			res.status(500).json(error);
 		}
-  },
+	},
 	deleteEmp: async (req, res) => {
 		try {
 			const emp = await Employee.findById(req.query.id);
