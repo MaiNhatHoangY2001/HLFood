@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const socket = require('socket.io');
 
 const app = express();
 
@@ -61,4 +62,23 @@ app.use('/api/files', uploadFileRoutes);
 
 const server = app.listen(port, () => {
 	console.log(`server is running... at ${port}`);
+});
+
+//IO socket
+
+const io = socket(server, {
+	cors: {
+		origin,
+		credential: true,
+	},
+});
+
+io.on('connection', (socket) => {
+	socket.on('list-order', (data) => {
+		io.emit('sent-list-order', data);
+	});
+
+	socket.on('notification', (data) => {
+		io.emit('sent-notification', data);
+	});
 });
