@@ -12,6 +12,8 @@ router.get("/order", middlewareController.verifyToken, orderController.getOrder)
 
 router.post("/order", middlewareController.verifyToken, orderController.addOrder);
 
+router.post("/order:pay", middlewareController.verifyToken, orderController.payOrder);
+
 router.get("/order_details", middlewareController.verifyToken, orderDetailController.getAllOrderDetail);
 
 router.put("/order_details:status", middlewareController.verifyToken, orderDetailController.changeFoodStatus);
