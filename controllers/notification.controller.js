@@ -3,6 +3,16 @@ const Employee = require('../model/Employee.model');
 const Order_detail = require('../model/Order_detail.model');
 
 const notificationController = {
+	getAllNotification: async (req, res) => {
+		try {
+			const notifications = await Notification.find(req.query);
+
+			res.status(200).json(notifications);
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
+
 	addNotification: async (req, res) => {
 		try {
 			const notification = new Notification(req.body);

@@ -3,9 +3,9 @@ const Food = require('../model/Food.model');
 const Order = require('../model/Order.model');
 
 const orderDetailController = {
-	getAllOrderDetail: async (_req, res) => {
+	getAllOrderDetail: async (req, res) => {
 		try {
-			const orderDetails = await Order_detail.find()
+			const orderDetails = await Order_detail.find(req.query)
 				.populate('food order')
 				.populate({
 					path: 'order',
@@ -96,10 +96,14 @@ const orderDetailController = {
 		try {
 			const id = req.body.id;
 			const quantityFinish = req.body.quantity_finish;
-			const status = req.body.status;
+			let status = 0;
 
-			const orderDetail = Order_detail.findById(id);
-			await orderDetail.updateOne({ $set: { quantity_finished: quantityFinish, status: status } });
+			const orderDetail = await Order_detail.findById(id);
+			if (orderDetail.quantity_finish === quantityFinish) {
+				status = 1;
+			}
+
+			await Order_detail.updateOne({ _id: id }, { $set: { quantity_finished: quantityFinish, status: status } });
 
 			res.status(200).json('Update status successfully');
 		} catch (error) {
