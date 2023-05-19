@@ -5,7 +5,17 @@ const Order_detail = require('../model/Order_detail.model');
 const notificationController = {
 	getAllNotification: async (req, res) => {
 		try {
-			const notifications = await Notification.find(req.query);
+			const notifications = await Notification.find({ employee: req.query.employee })
+				.limit(req.query.limit)
+				.populate('order_detail')
+				.populate({
+					path: 'order_detail',
+					populate: { path: 'food', select: 'name price image type' },
+				})
+				.populate({
+					path: 'order_detail',
+					populate: { path: 'order', select: 'tables', populate: { path: 'tables', select: 'table_num' } },
+				});
 
 			res.status(200).json(notifications);
 		} catch (error) {
@@ -26,6 +36,20 @@ const notificationController = {
 			}
 
 			res.status(200).json(saveNotifi);
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
+
+	setStatusNotifi: async (req, res) => {
+		try {
+			const ids = req.query.ids.split(',');
+
+			for (const id of ids) {
+				await Notification.updateOne({ _id: id }, { $set: { is_read: true } });
+			}
+
+			res.status(200).json('update successfully');
 		} catch (error) {
 			res.status(500).json(error);
 		}
