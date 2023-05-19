@@ -57,12 +57,19 @@ const tableController = {
 
 	deleteTable: async (req, res) => {
 		try {
-			const table = Table.findById(req.query.id);
-			await table.updateOne({
-				$set: {
-					is_deleted: true,
-				},
-			});
+			const ids = req.query.ids.split(',');
+
+			for (const id of ids) {
+				await Table.updateOne(
+					{ _id: id },
+					{
+						$set: {
+							is_deleted: true,
+						},
+					}
+				);
+			}
+
 			res.status(200).json('Delete successfully');
 		} catch (error) {
 			res.status(500).json(error);
