@@ -23,7 +23,6 @@ router.post(
 //LOGOUT
 router.post(
   "/logout",
-  middlewareController.verifyToken,
   authController.userLogout
 );
 
