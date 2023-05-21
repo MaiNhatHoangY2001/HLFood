@@ -1,29 +1,24 @@
-const authController = require("../auth/authEmpController");
-const empController = require("../controllers/emp.controller");
-const middlewareController = require("../middleware/middlewareController");
+const authController = require('../auth/authEmpController');
+const empController = require('../controllers/emp.controller');
+const middlewareController = require('../middleware/middlewareController');
 
-const router = require("express").Router();
+const router = require('express').Router();
 
 //REGISTER
-router.post("/register", empController.addEmp);
+router.post('/register', empController.addEmp);
 
 //LOGIN
-router.post("/login", authController.loginUser);
+router.post('/login', authController.loginUser);
 
 //REFRESH
-router.post("/refresh", authController.requestRefreshToken);
+router.post('/refresh', authController.requestRefreshToken);
 
 //COMPARE PASS
-router.post(
-  "/comparePass",
-  middlewareController.verifyToken,
-  authController.comparePassword
-);
+router.post('/comparePass', middlewareController.verifyToken, authController.comparePassword);
+
+router.put('/password', middlewareController.verifyTokenAndAdminAuth, authController.changePassEmp);
 
 //LOGOUT
-router.post(
-  "/logout",
-  authController.userLogout
-);
+router.post('/logout', authController.userLogout);
 
 module.exports = router;

@@ -44,6 +44,21 @@ const foodController = {
 			res.status(500).json(error);
 		}
 	},
+	hiddenFood: async (req, res) => {
+		try {
+			await Food.updateOne(
+				{ _id: req.body.id },
+				{
+					$set: {
+						is_outdated: req.body.is_outdated,
+					},
+				}
+			);
+			res.status(200).json('Update successfully');
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
 };
 
 module.exports = foodController;

@@ -8,6 +8,7 @@ router.post('/tables', middlewareController.verifyToken, tableController.addTabl
 router.put('/table', middlewareController.verifyToken, tableController.updateTable);
 router.delete('/table', middlewareController.verifyToken, tableController.deleteTable);
 router.put('/tables:num', middlewareController.verifyToken, tableController.updateNumTable);
+router.put('/table:hidden', middlewareController.verifyToken, tableController.hiddenTable);
 router.put('/tables/emps', middlewareController.verifyToken, tableController.setEmpTable);
 router.put('/tables/status', middlewareController.verifyToken, tableController.updateStatus);
 router.post('/tables:order', middlewareController.verifyToken, tableController.udpateTableOrder);

@@ -1,6 +1,5 @@
 const Employee = require('../model/Employee.model');
 const bcrypt = require('bcrypt');
-const SALT_WORK_FACTOR = 10;
 
 const empController = {
 	//ADD USER
