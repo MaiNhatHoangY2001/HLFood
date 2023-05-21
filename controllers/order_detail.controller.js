@@ -95,10 +95,17 @@ const orderDetailController = {
 	deleteOrderDetail: async (req, res) => {
 		try {
 			const idOrderDetail = req.params.id;
-			await Order_detail.findByIdAndRemove(idOrderDetail);
+			const orderDetail = await Order_detail.findById(idOrderDetail);
+			const order = await Order.findOne({ order_details: idOrderDetail });
+			const totalOrderPrice = order.total_order_price - orderDetail.total_detail_price * order.vat;
 
-			await Order.updateOne({ order_details: idOrderDetail }, { $pull: { order_details: idOrderDetail } });
+			await Order.updateOne(
+				{ order_details: idOrderDetail },
+				{ $pull: { order_details: idOrderDetail }, $set: { total_order_price: totalOrderPrice } }
+			);
 			await Food.updateOne({ order_details: idOrderDetail }, { $pull: { order_details: idOrderDetail } });
+
+			await Order_detail.findByIdAndRemove(idOrderDetail);
 
 			res.status(200).json('Delete Food Succesfully');
 		} catch (error) {
