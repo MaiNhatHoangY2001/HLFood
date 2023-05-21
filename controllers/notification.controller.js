@@ -43,7 +43,7 @@ const notificationController = {
 
 	setStatusNotifi: async (req, res) => {
 		try {
-			const ids = req.query.ids.split(',');
+			const ids = req.body.ids.split(',');
 
 			for (const id of ids) {
 				await Notification.updateOne({ _id: id }, { $set: { is_read: true } });
