@@ -3,6 +3,8 @@ const Employee = require('../model/Employee.model');
 const jwt = require('jsonwebtoken');
 const { verifyGoogleToken } = require('../middleware/middlewareController');
 const { checkEmp } = require('../controllers/emp.controller');
+const SALT_WORK_FACTOR = 10;
+
 
 const authController = {
 	//REGISTER IS ADD USER IN CONTROLLER
@@ -142,6 +144,46 @@ const authController = {
 	userLogout: async (req, res) => {
 		res.clearCookie('refreshToken');
 		res.status(200).json('LOGOUT!!');
+	},
+
+	changePassEmp: async (req, res) => {
+		try {
+			const password = req.body.newPassword;
+			const user = await Employee.findOne({ username: req.body.username });
+
+			if (!user) {
+				return res.status(401).json({ error: 'Invalid username' });
+			}
+
+			if (user.is_deleted) {
+				return res.status(403).json({
+					error: 'Account has been deleted and is no longer accessible',
+				});
+			}
+
+			const validPassword = await bcrypt.compare(req.body.oldPassword, user.password);
+			if (!validPassword) {
+				return res.status(402).json({ error: 'Old password is incorret' });
+			}
+
+			if (user && validPassword) {
+				bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
+					if (err) console.log(err);
+
+					// hash the password using our new salt
+					bcrypt.hash(password, salt, async function (err, hash) {
+						if (err) return console.log(err);
+						const newPassword = hash;
+						// override the cleartext password with the hashed one
+						await Employee.updateOne({ username: req.body.username }, { $set: { password: newPassword } });
+					});
+				});
+			}
+
+			res.status(200).json('Update successfully');
+		} catch (error) {
+			res.status(500).json(error);
+		}
 	},
 };
 
