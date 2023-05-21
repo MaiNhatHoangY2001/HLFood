@@ -55,6 +55,26 @@ const tableController = {
 		}
 	},
 
+	setOrderInTable: async (req, res) => {
+		try {
+			const tables = req.body.tables;
+			for (const id of tables) {
+				await table.updateOne(
+					{ _id: id },
+					{
+						$set: {
+							order: req.body.order,
+						},
+					}
+				);
+			}
+
+			res.status(200).json('Update successfully');
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
+
 	hiddenTable: async (req, res) => {
 		try {
 			await Table.updateOne(
