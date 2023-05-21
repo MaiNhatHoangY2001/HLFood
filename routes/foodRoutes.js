@@ -8,5 +8,6 @@ router.get('/foods:active', middlewareController.verifyToken, foodController.get
 router.post('/food', middlewareController.verifyToken, foodController.addFood);
 router.delete('/food', middlewareController.verifyToken, foodController.deleteFood);
 router.put('/food', middlewareController.verifyToken, foodController.updateFood);
+router.put('/food:hidden', middlewareController.verifyToken, foodController.hiddenFood);
 
 module.exports = router;

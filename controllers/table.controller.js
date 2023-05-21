@@ -55,6 +55,22 @@ const tableController = {
 		}
 	},
 
+	hiddenTable: async (req, res) => {
+		try {
+			await Table.updateOne(
+				{ _id: req.body.id },
+				{
+					$set: {
+						is_outdated: req.body.is_outdated,
+					},
+				}
+			);
+			res.status(200).json('Update successfully');
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	},
+
 	deleteTable: async (req, res) => {
 		try {
 			const ids = req.query.ids.split(',');

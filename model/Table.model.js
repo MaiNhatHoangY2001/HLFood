@@ -21,6 +21,10 @@ const table = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
+	is_outdated: {
+		type: Boolean,
+		default: false,
+	},
 	order: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Order',
