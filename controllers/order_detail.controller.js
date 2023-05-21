@@ -97,7 +97,7 @@ const orderDetailController = {
 			const idOrderDetail = req.params.id;
 			const orderDetail = await Order_detail.findById(idOrderDetail);
 			const order = await Order.findOne({ order_details: idOrderDetail });
-			const totalOrderPrice = order.total_order_price - orderDetail.total_detail_price * order.vat;
+			const totalOrderPrice = order.total_order_price - (orderDetail.total_detail_price + orderDetail.total_detail_price * order.vat);
 
 			await Order.updateOne(
 				{ order_details: idOrderDetail },
