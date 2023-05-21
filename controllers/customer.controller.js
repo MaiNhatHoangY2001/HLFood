@@ -3,7 +3,7 @@ const CustomerModel = require('../model/Customer.model');
 const cusController = {
 	getAllCus: async (req, res) => {
 		try {
-			const cus = await CustomerModel.find(res.query);
+			const cus = await CustomerModel.find(res.query).populate('order', '_id time_booking', null, { sort: { time_booking: -1 } });
 			res.status(200).json(cus);
 		} catch (error) {
 			res.status(500).json(error);

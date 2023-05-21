@@ -39,7 +39,7 @@ const orderController = {
 				await Table.updateOne({ _id: id }, { $unset: { order: 1 }, $set: { status: 0 } });
 			}
 
-			res.status(200).json("Pay order successfully");
+			res.status(200).json('Pay order successfully');
 		} catch (error) {
 			res.status(500).json(error);
 		}
@@ -70,21 +70,28 @@ const orderController = {
 					await Order.updateOne({ _id: saveOrder._id }, { $set: { customer: cus._id } });
 					await Customer.updateOne({ _id: cus._id }, { $push: { order: saveOrder._id } });
 				}
+
+				const tablesInput = req.body.bookingTable.split(',').map(Number);
+				const tables = await Table.find({ table_num: { $in: tablesInput } });
+				await Order.updateOne({ _id: saveOrder._id }, { $set: { tables: tables } });
+			}
+			if (!req.body.customerPhone) {
+				bookingTable(req.body.bookingTable, saveOrder);
 			}
 
 			//Modify table
-			if (!req.body.time_booking) {
-				bookingTable(req.body.bookingTable, saveOrder);
-			} else {
-				const timeBooking = new Date(req.body.time_booking);
-				const reminderTime = new Date(timeBooking.getTime() - 60 * 60 * 1000);
-				const delay = reminderTime.getTime() - Date.now();
-				//schedule table when customer booking
-				setTimeout(() => {
-					console.log('Running');
-					bookingTable(req.body.bookingTable, saveOrder);
-				}, delay);
-			}
+			// if (!req.body.time_booking) {
+			// bookingTable(req.body.bookingTable, saveOrder);
+			// } else {
+			// 	const timeBooking = new Date(req.body.time_booking);
+			// 	const reminderTime = new Date(timeBooking.getTime() - 60 * 60 * 1000);
+			// 	const delay = reminderTime.getTime() - Date.now();
+			// 	//schedule table when customer booking
+			// 	setTimeout(() => {
+			// 		console.log('Running');
+			// 		bookingTable(req.body.bookingTable, saveOrder);
+			// 	}, delay);
+			// }
 
 			res.status(200).json({ orderId: saveOrder._id });
 		} catch (error) {
