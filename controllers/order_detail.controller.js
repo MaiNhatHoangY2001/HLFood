@@ -51,12 +51,20 @@ const orderDetailController = {
 	updateOrderDetails: async (req, res) => {
 		try {
 			const orderDetails = req.body;
+			let totalOrderPrice = 0;
+			let orderId = '';
 
 			for (const orderDetail of orderDetails) {
 				const { _id, food, order, time_created, ...dataOrderDetail } = orderDetail;
-				const OrderDetail = Order_detail.findById(_id);
-				await OrderDetail.updateOne({ $set: { ...dataOrderDetail } });
+				await Order_detail.updateOne({ _id: _id }, { $set: { ...dataOrderDetail } });
+
+				const OrderDetail = await Order_detail.findById(_id);
+				orderId = OrderDetail.order;
+				totalOrderPrice += OrderDetail.total_detail_price;
 			}
+			const order = await Order.findById(orderId);
+			await Order.updateOne({ _id: orderId }, { $set: { total_order_price: totalOrderPrice + totalOrderPrice * order.vat } });
+
 			res.status(200).json('Update Order details succesfully');
 		} catch (error) {
 			res.status(500).json(error);
