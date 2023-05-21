@@ -55,12 +55,18 @@ const orderDetailController = {
 			let orderId = '';
 
 			for (const orderDetail of orderDetails) {
-				const { _id, food, order, time_created, ...dataOrderDetail } = orderDetail;
-				await Order_detail.updateOne({ _id: _id }, { $set: { ...dataOrderDetail } });
+				const { _id, time_created, ...dataOrderDetail } = orderDetail;
 
 				const OrderDetail = await Order_detail.findById(_id);
+
+				const food = await Food.findById(OrderDetail.food);
+
+				const totalDetailPrice = food.price * orderDetail.quantity;
+
+				await Order_detail.updateOne({ _id: _id }, { $set: { total_detail_price: totalDetailPrice, ...dataOrderDetail } });
+
 				orderId = OrderDetail.order;
-				totalOrderPrice += OrderDetail.total_detail_price;
+				totalOrderPrice += totalDetailPrice;
 			}
 			const order = await Order.findById(orderId);
 			await Order.updateOne({ _id: orderId }, { $set: { total_order_price: totalOrderPrice + totalOrderPrice * order.vat } });
