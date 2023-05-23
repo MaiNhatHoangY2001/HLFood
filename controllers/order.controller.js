@@ -2,6 +2,7 @@ const Employee = require('../model/Employee.model');
 const Order = require('../model/Order.model');
 const Customer = require('../model/Customer.model');
 const Table = require('../model/Table.model');
+const CustomerModel = require('../model/Customer.model');
 
 const orderController = {
 	getAllOrder: async (req, res) => {
@@ -39,6 +40,9 @@ const orderController = {
 				await Table.updateOne({ _id: id }, { $unset: { order: 1 }, $set: { status: 0 } });
 			}
 
+			if (req.body.customer) {
+				await CustomerModel.updateOne({ _id: req.body.customer }, { status: 2 });
+			}
 			res.status(200).json('Pay order successfully');
 		} catch (error) {
 			res.status(500).json(error);

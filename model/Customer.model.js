@@ -15,6 +15,10 @@ const customer = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
+	status: {
+		type: Number,
+		default: 0,
+	},
 	order: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
