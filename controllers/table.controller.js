@@ -1,6 +1,7 @@
 const Table = require('../model/Table.model');
 const Employee = require('../model/Employee.model');
 const Order = require('../model/Order.model');
+const CustomerModel = require('../model/Customer.model');
 
 const tableController = {
 	addTables: async (req, res) => {
@@ -59,7 +60,7 @@ const tableController = {
 		try {
 			const tables = req.body.tables;
 			for (const id of tables) {
-				await table.updateOne(
+				await Table.updateOne(
 					{ _id: id },
 					{
 						$set: {
@@ -159,6 +160,10 @@ const tableController = {
 			await deleteTableOrder(idTables, idOrder);
 
 			await addTableOrder(req.body.table, idOrder, req.body.status);
+
+			if (req.body.customer) {
+				await CustomerModel.updateOne({ _id: req.body.customer }, { status: 1 });
+			}
 
 			res.status(200).json('Update successfully');
 		} catch (error) {
