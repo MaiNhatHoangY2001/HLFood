@@ -7,7 +7,7 @@ const CustomerModel = require('../model/Customer.model');
 const orderController = {
 	getAllOrder: async (req, res) => {
 		try {
-			const orders = await Order.find().populate('tables', "table_num status floor chair");
+			const orders = await Order.find().populate('tables customer', "table_num status floor chair name phone_num");
 
 			res.status(200).json(orders);
 		} catch (error) {
