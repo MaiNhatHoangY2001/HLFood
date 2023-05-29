@@ -18,7 +18,7 @@ const orderController = {
 	getOrder: async (req, res) => {
 		try {
 			const order = await Order.findById(req.query.id)
-				.populate('tables order_details')
+				.populate('tables order_details customer')
 				.populate({
 					path: 'order_details',
 					populate: { path: 'food' },
